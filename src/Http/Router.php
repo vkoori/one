@@ -28,20 +28,30 @@ class Router
         self::$as_info = [];
     }
 
-    public static function cacheRoutes()
+    public static function cacheRoutes(bool $forceCache=false)
     {
         $key = md5(__FILE__ . self::$file . filemtime(self::$file));
 
-        $info          = unserialize(
-            Cache::get(
-                $key, 
-                function () {
-                    require self::$file;
-                    return serialize([self::$info, self::$as_info]);
-                }, 
-                60 * 60 * 24 * 30
-            )
-        );
+        if ($forceCache) {
+            require self::$file;
+            $info = [self::$info, self::$as_info];
+            Cache::set(
+                key: $key, 
+                val: serialize($info), 
+                ttl: 60 * 60 * 24 * 30
+            );
+        } else {
+            $info = unserialize(
+                Cache::get(
+                    key: $key, 
+                    closure: function () {
+                        require self::$file;
+                        return serialize([self::$info, self::$as_info]);
+                    }, 
+                    ttl: 60 * 60 * 24 * 30
+                )
+            );
+        }
 
         return $info;
     }

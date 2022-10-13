@@ -11,12 +11,12 @@ use One\Cache\Redis;
  * @package Facades
  * @mixin \One\Cache\Redis
  * @mixin \Redis
- * @method string static get($key, \Closure $closure = null, $ttl = 0, $tags = []) static
- * @method bool static delRegex($key) static
- * @method bool static del($key) static
- * @method bool static flush($tag) static
- * @method bool static set($key, $val, $ttl = 0, $tags = []) static
- * @method Redis static setConnection($key)
+ * @method static string get($key, \Closure $closure = null, $ttl = 0, $tags = [])
+ * @method static bool delRegex($key)
+ * @method static bool del($key)
+ * @method static bool flush($tag)
+ * @method static bool set($key, $val, $ttl = 0, $tags = [])
+ * @method static Redis setConnection($key)
  */
 class Cache extends Facade
 {
