@@ -2,16 +2,10 @@
 
 namespace One\Validation;
 
-use One\Http\Response;
 use Rakit\Validation\Validator;
 
 class FormRequest
 {
-	/**
-	 * @var Response
-	 */
-	public $response = null;
-
 	/**
 	 * @var \Rakit\Validation\Validator
 	 */
@@ -22,9 +16,8 @@ class FormRequest
 	 */
 	private $validation;
 
-	public function __construct(Response $response)
+	public function __construct()
 	{
-		$this->response = $response;
 		$this
 		->setValidator()
 		->makeValidate()
@@ -54,7 +47,6 @@ class FormRequest
 	public function failedValidation(\Rakit\Validation\Validation $validation)
 	{
 		throw new ValidationException(
-			response: $this->response,
 			errors: $this->getErrors(exections: $validation->errors()->toArray()),
 			code: 422
 		);
@@ -70,7 +62,7 @@ class FormRequest
 	{
 
 		$this->validator = new Validator(
-			messages: __('validation')
+			// messages: __('validation')
 		);
 
 		return $this;
@@ -82,7 +74,14 @@ class FormRequest
 			inputs: $this->validationData(),
 			rules: $this->rules(),
 			messages: $this->messages()
-		)->setAliases(
+		);
+
+		return $this;
+	}
+
+	private function setAttributes(): self
+	{
+		$this->validation->setAliases(
 			aliases: $this->attributes()
 		);
 

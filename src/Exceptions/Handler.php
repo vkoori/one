@@ -2,34 +2,71 @@
 
 namespace One\Exceptions;
 
-use One\ConfigTrait;
+use One\Http\Request;
+use One\Http\Response;
 
-class Handler
+class Exception
 {
-    use ConfigTrait;
+    /**
+     * @var \One\Http\Response
+     */
+    private $response;
 
-    public static function render(HttpException $e)
+    public function render(\Throwable $e)
     {
-        if (isset(self::$conf['render'])) {
-            return self::$conf['render']($e);
-        }
+        $errors = $this->getErrors($e);
+        $code = $this->getStatusCode($e);
 
+        return $this
+            ->setResponse(e: $e)
+            ->setBody(e: $e, errors: $errors, code: $code);
+    }
+
+    public function getErrors(\Throwable $e)
+    {
+        return match ($e::class) {
+            default => $this->default($e),
+        };
+    }
+
+    private function default(\Throwable $e)
+    {
+        error_report($e);
+        return $e->getMessage();
+    }
+
+    private function getStatusCode(\Throwable $e): int
+    {
         $code = $e->getCode();
         if ($code === 0) {
             $code = 500;
         }
-        $e->response->code($code);
 
-        if ($e->response->getHttpRequest()->isJson()) {
-            return $e->response->json($e->getMessage(), $code);
+        return $code;
+    }
+
+    private function setResponse(\Throwable $e): self
+    {
+        $this->response = isset($e->response) ? $e->response : new Response(new Request);
+        return $this;
+    }
+
+    private function setBody(\Throwable $e, mixed $errors, int $code)
+    {
+        $this->response->code($code);
+
+        if ($this->response->getHttpRequest()->isJson()) {
+            $body = $this->response->json($errors, $code);
         } else {
             $file = _APP_PATH_VIEW_ . '/exceptions/' . $code . '.php';
             if (file_exists($file)) {
-                return $e->response->tpl('exceptions/' . $code, ['e' => $e]);
+                $body = $this->response->tpl('exceptions/' . $code, ['e' => $e]);
             } else {
-                return $e->response->json($e->getMessage(), $code);
+                $body = $this->response->json($errors, $code);
             }
         }
-    }
-}
 
+        return $body;
+    }
+
+}

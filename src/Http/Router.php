@@ -324,7 +324,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function get($path, $action)
@@ -333,7 +333,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function post($path, $action)
@@ -342,7 +342,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function put($path, $action)
@@ -351,7 +351,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function delete($path, $action)
@@ -360,7 +360,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function patch($path, $action)
@@ -369,7 +369,7 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function head($path, $action)
@@ -378,14 +378,13 @@ class Router
     }
 
     /**
-     * @param string $path
+     * @param string $path ['use' => '','as'=>'','middle'=>[]]
      * @param string|array $action
      */
     public static function options($path, $action)
     {
         self::set('options', $path, $action);
     }
-
 
 }
 

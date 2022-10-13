@@ -96,7 +96,7 @@ class Fire
 		if ($arg instanceof \ReflectionParameter) {
 			$className = $arg->getClass()->name ?? null;
 		} else {
-			$className = is_object($arg) ? get_class($arg) : null;
+			$className = is_object($arg) && !($arg instanceof \Closure) ? get_class($arg) : null;
 		}
 
 		return $className;
