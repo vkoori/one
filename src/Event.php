@@ -36,7 +36,7 @@ class Event
      * @param string $event class name
      * @param array $listeners array of class name (all classes has method handle)
      */
-    protected static function setListeners(string $event, array $listeners)
+    public static function setListeners(string $event, array $listeners)
     {
         foreach ($listeners as $listener) {
             Event::addListener(class: $event, event: 'default', fn: function(...$args) use ($listener) {
