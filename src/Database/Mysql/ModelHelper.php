@@ -55,8 +55,13 @@ class ModelHelper
     public function getTables()
     {
         $res = Model::cache(0)->query('show tables')->toArray();
-        $k = key($res[0]);
-        return array_values(array_column($res,$k));
+        if (count($res)) {
+            $k = key($res[0]);
+            $tables = array_values(array_column($res,$k));
+        } else {
+            $tables = [];
+        }
+        return $tables;
     }
 
     /**
