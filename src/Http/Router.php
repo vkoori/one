@@ -33,6 +33,8 @@ class Router
         $key = md5(__FILE__ . self::$file . filemtime(self::$file));
 
         if ($forceCache) {
+            self::clearCache();
+
             require self::$file;
             $info = [self::$info, self::$as_info];
             Cache::set(
