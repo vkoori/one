@@ -62,7 +62,7 @@ class ModelHelper
     /**
      * 创建模型
      * @param null $dir
-     * @return false|int
+     * @return void
      */
     public function createModel($dir = null)
     {
@@ -75,7 +75,9 @@ class ModelHelper
             mkdir($dir, 0755, true);
         }
 
-        return file_put_contents($dir . $this->getModelName($this->table) . '.php', $this->info());
+        if ( !file_exists($dir . $this->getModelName($this->table) . '.php') ) {
+            file_put_contents($dir . $this->getModelName($this->table) . '.php', $this->info());
+        }
     }
 
     /**

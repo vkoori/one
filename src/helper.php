@@ -322,4 +322,29 @@ if (function_exists('error_report') === false) {
     }
 }
 
+/**
+ * @param string $str
+ * @param string $type e|s|w|i
+ */
+function colorLog(string $str, string $type = ''): string
+{
+    switch ($type) {
+        case 'e': //error
+            $str = "\033[31m$str \033[0m\n";
+        break;
+        case 's': //success
+            $str = "\033[32m$str \033[0m\n";
+        break;
+        case 'w': //warning
+            $str = "\033[33m$str \033[0m\n";
+        break;  
+        case 'i': //info
+            $str = "\033[36m$str \033[0m\n";
+        break;    
+        default:
+            $str = $str;
+        break;
+    }
 
+    return $str;
+}
