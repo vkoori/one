@@ -19,6 +19,8 @@ class Request
 
     protected $request = [];
 
+    protected $headers = [];
+
     public $fd = 0;
 
     public $args = [];
@@ -39,6 +41,7 @@ class Request
         $this->post    = &$_POST;
         $this->files   = &$_FILES;
         $this->request = &$_REQUEST;
+        $this->headers = $this->getAllHeaders();
     }
 
     /**
@@ -238,6 +241,35 @@ class Request
         } else {
             return false;
         }
+    }
+
+    public function getHeader(string $key, ?string $default=Null)
+    {
+        return $this->headers[$this->initHeaderKey(key: $key)] ?? $default;
+    }
+
+    public function setHeader(string $key, string $value): void
+    {
+        $this->headers[$this->initHeaderKey(key: $key)] = $value;
+    }
+
+    private function getAllHeaders(): array
+    {
+        $response = [];
+
+        $headers = getallheaders();
+        foreach ($headers as $key => $value) {            
+            $response[$this->initHeaderKey(key: $key)] = $value;
+        }
+
+        return $response;
+    }
+
+    private function initHeaderKey(string $key): string
+    {
+        $key = str_replace(search: '_', replace: '-', subject: $key);
+        $key = strtolower(string: $key);
+        return $key;
     }
 
 
