@@ -21,6 +21,7 @@ class FormRequest
 		$this
 		->setValidator()
 		->makeValidate()
+		->setAttributes()
 		->checkFailsValidator();
 	}
 

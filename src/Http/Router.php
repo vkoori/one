@@ -99,6 +99,9 @@ class Router
                 if ($arr === null) {
                     return null;
                 }
+                if (isset($arr[0]) && count($keys) > $j+1) {
+                    return null;
+                }
                 if (is_string($arr) || (count($arr) == 1 && isset($arr[0]))) {
                     break;
                 }

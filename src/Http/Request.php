@@ -199,7 +199,7 @@ class Request
      */
     public function json()
     {
-        return json_decode($this->input(), true);
+        return json_decode($this->input(), true) ?? [];
     }
 
     /**
@@ -257,7 +257,7 @@ class Request
     {
         $response = [];
 
-        $headers = getallheaders();
+        $headers = function_exists('getallheaders') ? \getallheaders() : [];
         foreach ($headers as $key => $value) {            
             $response[$this->initHeaderKey(key: $key)] = $value;
         }
