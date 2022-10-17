@@ -5,7 +5,7 @@ namespace One\Swoole;
 
 use One\Facades\Log;
 
-class Request extends \One\Http\Request
+class Request extends \One\Http\Request\Request
 {
 
     private $id = 'Request_id';

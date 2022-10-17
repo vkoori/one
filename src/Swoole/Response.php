@@ -9,7 +9,7 @@ use One\Facades\Log;
  * @package One\Swoole
  * @mixin \swoole_http_response
  */
-class Response extends \One\Http\Response
+class Response extends \One\Http\Response\Response
 {
 
     /**
@@ -38,7 +38,7 @@ class Response extends \One\Http\Response
 
     /**
      * @param $code
-     * @return $this|\One\Http\Response
+     * @return $this|\One\Http\Response\Response
      */
     public function code($code)
     {

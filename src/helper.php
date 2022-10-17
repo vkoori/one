@@ -348,3 +348,13 @@ function colorLog(string $str, string $type = ''): string
 
     return $str;
 }
+
+function request(): \One\Http\Request\Request
+{
+    return \One\Http\Request\Helper::generate();
+}
+
+function response(?\One\Http\Request\Request $request=Null): \One\Http\Response\Response
+{
+    return \One\Http\Response\Helper::generate(request: $request);
+}

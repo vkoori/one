@@ -45,7 +45,7 @@ trait HttpEvent
             if ($e instanceof DbException) {
                 $msg = 'db error!';
             }
-            $data = Handler::render(new HttpException($res, $msg, $e->getCode()));
+            $data = Handler::render(new HttpException($msg, $e->getCode()));
         }
         $response->end($data);
 

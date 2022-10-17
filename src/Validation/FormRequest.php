@@ -27,7 +27,7 @@ class FormRequest
 
 	public function validationData(): array
 	{
-		return [];
+		return request()->all();
 	}
 
 	public function rules(): array
@@ -63,7 +63,7 @@ class FormRequest
 	{
 
 		$this->validator = new Validator(
-			// messages: __('validation')
+			messages: __('validation')
 		);
 
 		return $this;

@@ -3,50 +3,16 @@
 namespace One\Http;
 
 use One\Exceptions\HttpException;
-use One\Facades\Log;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 
 class Controller
 {
 
     /**
-     * @var Request
-     */
-    protected $request = null;
-
-    /**
-     * @var \One\Swoole\Response
-     */
-    protected $response = null;
-
-    /**
-     * @var \App\Server\AppHttpServer
-     */
-    protected $server;
-
-    protected $go_id = -1;
-
-
-    /**
-     * Controller constructor.
-     * @param $request
-     * @param $response
-     */
-    public function __construct($request, $response, $server = null)
-    {
-        $this->go_id    = get_co_id();
-        $this->request  = $request;
-        $this->response = $response;
-        $this->server   = $server;
-    }
-
-
-    /**
      * @return Session
      */
-    protected function session()
+    public static function session()
     {
-        return $this->response->session();
+        return response()->session();
     }
 
     /**
@@ -55,18 +21,18 @@ class Controller
      * @param int $code
      * @throws HttpException
      */
-    protected function error($msg, $code = 400)
+    public static function error($msg, $code = 400)
     {
-        throw new HttpException($this->response, $msg, $code);
+        throw new HttpException(message: $msg, code: $code);
     }
 
     /**
      * @param $data
      * @return string
      */
-    protected function json($data)
+    public static function json($data)
     {
-        return $this->response->json($data);
+        return response()->json($data);
     }
 
     /**
@@ -74,25 +40,9 @@ class Controller
      * @param string $callback
      * @return string
      */
-    protected function jsonP($data, $callback = 'callback')
+    public static function jsonP($data, $callback = 'callback')
     {
-        return $this->response->json($data, 0, $callback);
-    }
-
-    /**
-     * 检查必填字段
-     * @param array $fields
-     * @param array $data
-     * @throws HttpException
-     */
-    protected function verify($fields, $data)
-    {
-        foreach ($fields as $v) {
-            $val = array_get($data, $v);
-            if ($val === null || $val === '') {
-                $this->error("{$v}不能为空");
-            }
-        }
+        return response()->json($data, 0, $callback);
     }
 
     /**
@@ -102,7 +52,7 @@ class Controller
      * @return string
      * @throws HttpException
      */
-    protected function display($tpl, $data = [], $auto_set_tpl_dir = true)
+    public static function view(string $tpl, array $data = [], bool $auto_set_tpl_dir = true)
     {
         if ($auto_set_tpl_dir) {
             $dir = substr(get_called_class(), 4);
@@ -110,9 +60,9 @@ class Controller
             $dir = str_replace('\\', '/', $dir);
             $dir = str_replace('//', '/', $dir);
             $dir = strtolower(trim($dir, '/'));
-            return $this->response->tpl($dir . '/' . $tpl, $data);
+            return response()->tpl($dir . '/' . $tpl, $data);
         } else {
-            return $this->response->tpl($tpl, $data);
+            return response()->tpl($tpl, $data);
         }
 
     }

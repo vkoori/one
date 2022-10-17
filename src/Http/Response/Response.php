@@ -1,14 +1,15 @@
 <?php
 
-namespace One\Http;
+namespace One\Http\Response;
 
 use One\Exceptions\HttpException;
+use One\Http\Request\Request;
 
 class Response
 {
 
     /**
-     * @var Request
+     * @var \One\Http\Request\Request
      */
     protected $httpRequest;
 
@@ -136,11 +137,11 @@ class Response
             return format_json($data, 0, $this->getHttpRequest()->id());
         } else {
             if (defined('_APP_PATH_VIEW_') === false) {
-                throw new HttpException($this, '未定义模板路径:_APP_PATH_VIEW_', 4001);
+                throw new HttpException('未定义模板路径:_APP_PATH_VIEW_', 4001);
             }
             $file = _APP_PATH_VIEW_ . '/' . $file . '.php';
             if (!file_exists($file)) {
-                throw new HttpException($this, '未定义模板路径:' . $file, 4002);
+                throw new HttpException('未定义模板路径:' . $file, 4002);
             }
             ob_start();
             extract($data);

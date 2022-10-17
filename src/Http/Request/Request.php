@@ -1,6 +1,6 @@
 <?php
 
-namespace One\Http;
+namespace One\Http\Request;
 
 use One\Facades\Log;
 
@@ -221,6 +221,11 @@ class Request
             }
         }
         return $files;
+    }
+
+    public function all(): array
+    {
+        return array_merge($this->res(), $this->json(), $this->file());;
     }
 
     /**

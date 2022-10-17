@@ -2,24 +2,14 @@
 
 namespace One\Exceptions;
 
-use One\Http\Request;
-use One\Http\Response;
-
 class Exception
 {
-    /**
-     * @var \One\Http\Response
-     */
-    private $response;
-
     public function render(\Throwable $e)
     {
         $errors = $this->getErrors($e);
         $code = $this->getStatusCode($e);
 
-        return $this
-            ->setResponse(e: $e)
-            ->setBody(e: $e, errors: $errors, code: $code);
+        return $this->setBody(e: $e, errors: $errors, code: $code);
     }
 
     public function getErrors(\Throwable $e)
@@ -45,24 +35,18 @@ class Exception
         return $code;
     }
 
-    private function setResponse(\Throwable $e): self
-    {
-        $this->response = isset($e->response) ? $e->response : new Response(new Request);
-        return $this;
-    }
-
     private function setBody(\Throwable $e, mixed $errors, int $code)
     {
-        $this->response->code($code);
+        response()->code($code);
 
-        if ($this->response->getHttpRequest()->isJson()) {
-            $body = $this->response->json($errors, $code);
+        if (response()->getHttpRequest()->isJson()) {
+            $body = response()->json($errors, $code);
         } else {
             $file = _APP_PATH_VIEW_ . '/exceptions/' . $code . '.php';
             if (file_exists($file)) {
-                $body = $this->response->tpl('exceptions/' . $code, ['e' => $e]);
+                $body = response()->tpl('exceptions/' . $code, ['e' => $e]);
             } else {
-                $body = $this->response->json($errors, $code);
+                $body = response()->json($errors, $code);
             }
         }
 

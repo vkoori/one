@@ -186,12 +186,19 @@ class Router
         $as_name = isset($info[0]['as']) ? $info[0]['as'] : '';
 
         $str = is_array($info[0]) ? $info[0]['use'] : $info[0];
-        list($class, $fun) = explode('@', $str);
+        list($class, $method) = explode('@', $str);
+        if (!method_exists($class, $method)) {
+            throw new RouterException('method not exists', 404);
+        }
 
-        $funcs = [];
+        $flow = [];
         foreach ($info as $i => $v) {
-            if ($i > 0) {
-                $funcs[] = function ($handler, ...$args) use ($v) {
+            if ($i == 0) {
+                $flow[] = function () use ($str) {
+                    return call($str, $this->args);
+                };
+            } else {
+                $flow[] = function ($handler, ...$args) use ($v) {
                     return function () use ($v, $handler, $args) {
                         array_unshift($args, $handler);
                         return call($v, $args);
@@ -200,22 +207,17 @@ class Router
             }
         }
 
-        $action = function () use ($class, $fun, $other_args) {
-            $obj = new $class(...$other_args);
-            if (!method_exists($obj, $fun)) {
-                throw new RouterException('method not exists', 404);
-            }
-            return $obj->$fun(...$this->args);
-        };
+        $action = array_slice($flow, 0, 1);
+        $mids = array_slice($flow, 1);
 
-        return [$class, $fun, $funcs, $action, $this->args, $as_name];
+        return [$class, $method, $mids, $action[0], $this->args, $as_name];
 
     }
 
 
-    public function getExecAction($mids, $action, ...$args)
+    public function getExecAction($flow, $action, ...$args)
     {
-        foreach ($mids as $fn) {
+        foreach ($flow as $fn) {
             $action = $fn($action, ...$args);
         }
         return $action;
