@@ -193,16 +193,14 @@ if (function_exists('format_json') === false) {
     /**
      * 统一格式json输出
      */
-    function format_json($data, $code, $id)
+    function format_json($data, $msg, $code, $id)
     {
-        $arr = ['err' => $code, 'rid' => $id];
-        if ($code) {
-            $arr['msg'] = $data;
-            $arr['res'] = '';
-        } else {
-            $arr['msg'] = '';
-            $arr['res'] = $data;
-        }
+        $arr = [
+            'status' => $code, 
+            'rid' => $id,
+            'msg' => $msg,
+            'res' => $data
+        ];
         return json_encode($arr);
     }
 }

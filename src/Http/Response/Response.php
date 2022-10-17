@@ -4,6 +4,7 @@ namespace One\Http\Response;
 
 use One\Exceptions\HttpException;
 use One\Http\Request\Request;
+use One\Http\Router;
 
 class Response
 {
@@ -64,13 +65,13 @@ class Response
      * @param null|string $callback
      * @return string
      */
-    public function json($data, $code = 0, $callback = null)
+    public function json($data, $msg = '', $code = 200, $callback = null)
     {
         $this->header('Content-type', 'application/json');
         if ($callback === null) {
-            return format_json($data, $code, $this->httpRequest->id());
+            return format_json($data, $msg, $code, $this->httpRequest->id());
         } else {
-            return $callback . '(' . format_json($data, $code, $this->httpRequest->id()) . ')';
+            return $callback . '(' . format_json($data, $msg, $code, $this->httpRequest->id()) . ')';
         }
     }
 

@@ -30,9 +30,9 @@ class Controller
      * @param $data
      * @return string
      */
-    public static function json($data)
+    public static function json($data, $msg='', $code=200)
     {
-        return response()->json($data);
+        return response()->json($data, $msg, $code);
     }
 
     /**

@@ -40,13 +40,13 @@ class Exception
         response()->code($code);
 
         if (response()->getHttpRequest()->isJson()) {
-            $body = response()->json($errors, $code);
+            $body = response()->json(null, $errors, $code);
         } else {
             $file = _APP_PATH_VIEW_ . '/exceptions/' . $code . '.php';
             if (file_exists($file)) {
                 $body = response()->tpl('exceptions/' . $code, ['e' => $e]);
             } else {
-                $body = response()->json($errors, $code);
+                $body = response()->json(null, $errors, $code);
             }
         }
 
