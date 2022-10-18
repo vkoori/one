@@ -6,6 +6,7 @@ namespace One\Database\Mysql;
 /**
  * Class Model
  * @method static string insert($data, $is_mulit = false)
+ * @method static int delete()
  * @method static EventBuild cache($time)
  * @method static EventBuild with($relation, array $closure = null)
  * @method static ListModel|static[]|Model[] query($sql, array $build = [])
@@ -16,6 +17,7 @@ namespace One\Database\Mysql;
  * @method static \Generator|static[] chunk($count = 100)
  * @method static PageInfo findAllPageInfo()
  * @method static int count()
+ * @method static PageInfo paginate(?int $perPage = Null, string $query = 'page')
  * @method static int sum($column)
  * @method static mixed exec($sql, array $build = [], $is_insert = false)
  * @method static \PDO getConnect()

@@ -18,6 +18,10 @@ class Response
 
     public $_auto_to_json = true;
 
+    /**
+     * @var int
+     */
+    private $code;
 
     public function __construct(Request $request)
     {
@@ -67,6 +71,8 @@ class Response
      */
     public function json($data, $msg = '', $code = 200, $callback = null)
     {
+        $this->code($code);
+
         $this->header('Content-type', 'application/json');
         if ($callback === null) {
             return format_json($data, $msg, $code, $this->httpRequest->id());
@@ -86,9 +92,15 @@ class Response
      */
     public function code($code): self
     {
+        $this->code = $code;
         http_response_code($code);
 
         return $this;
+    }
+
+    public function getCode(): int
+    {
+        return $this->code;
     }
 
 
@@ -135,7 +147,7 @@ class Response
     {
         if ($this->_auto_to_json && $this->getHttpRequest()->isJson()) {
             $this->header('Content-type', 'application/json');
-            return format_json($data, 0, $this->getHttpRequest()->id());
+            return format_json($data, "", 0, $this->getHttpRequest()->id());
         } else {
             if (defined('_APP_PATH_VIEW_') === false) {
                 throw new HttpException('未定义模板路径:_APP_PATH_VIEW_', 4001);

@@ -291,18 +291,19 @@ class Build
     public function findAllPageInfo()
     {
         $page = new PageInfo();
+        
         $info = $this->getData(true);
         $ret  = new ListModel($info);
         if ($info) {
             $ret = $this->fillSelectWith($ret, 'setRelationList');
         }
-        $this->is_count = 1;
-        $this->limit    = 0;
-        $res            = $this->getData();
-        $this->is_count = 0;
-        $page->total    = $res->row_count;
+
+        $page->setData(
+            total: $this->getTotal(),
+            list: $ret
+        );
+
         unset($this->model);
-        $page->list = $ret;
         return $page;
     }
 
@@ -576,6 +577,33 @@ class Build
     {
         $this->limit = $skip . ',' . $limit;
         return $this;
+    }
+
+    /**
+     * @param int $limit
+     * @param int $skip
+     * @return \One\Database\Mysql\PageInfo
+     */
+    public function paginate(?int $perPage = Null, string $query = 'page')
+    {
+        $pageInfo = new PageInfo();
+        $pageInfo->setPaginate(perPage: $perPage, query: $query);
+
+        $info = $this->limit(limit: $pageInfo->limit, skip: $pageInfo->skip)->getData(true);
+        $list  = new ListModel($info);
+        if ($info) {
+            $list = $this->fillSelectWith($list, 'setRelationList');
+        }
+
+        $pageInfo->setData(total: $this->getTotal(), list: $list);
+
+        unset($this->model);
+        return $pageInfo;
+    }
+
+    private function getTotal()
+    {
+        return call_user_func([$this->model_name, 'count'], []);
     }
 
     private $having = [];
