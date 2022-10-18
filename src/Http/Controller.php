@@ -40,9 +40,9 @@ class Controller
      * @param string $callback
      * @return string
      */
-    public static function jsonP($data, $callback = 'callback')
+    public static function jsonP($data, $msg='', $callback = 'callback')
     {
-        return response()->json($data, 0, $callback);
+        return response()->json($data, $msg, 0, $callback);
     }
 
     /**

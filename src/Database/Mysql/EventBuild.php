@@ -7,7 +7,7 @@ class EventBuild extends CacheBuild
 
     protected function get($sql = '', $build = [], $all = false)
     {
-        if ($this->callBefre(__FUNCTION__, $sql) !== false) {
+        if ($this->callBefore(__FUNCTION__, $sql) !== false) {
             $ret = parent::get($sql, $build, $all);
             $this->callAfter(__FUNCTION__, $ret);
             return $ret;
@@ -21,7 +21,7 @@ class EventBuild extends CacheBuild
     public function update($data)
     {
         $ret = null;
-        if ($this->callBefre(__FUNCTION__, $data) !== false) {
+        if ($this->callBefore(__FUNCTION__, $data) !== false) {
             $ret = parent::update($data);
             $this->callAfter(__FUNCTION__, $ret, $data);
         }
@@ -35,7 +35,7 @@ class EventBuild extends CacheBuild
     public function delete()
     {
         $ret = null;
-        if ($this->callBefre(__FUNCTION__) !== false) {
+        if ($this->callBefore(__FUNCTION__) !== false) {
             $ret = parent::delete();
             $this->callAfter(__FUNCTION__, $ret);
         }
@@ -51,7 +51,7 @@ class EventBuild extends CacheBuild
     public function insert($data, $is_mulit = false)
     {
         $ret = null;
-        if ($this->callBefre(__FUNCTION__, $data) !== false) {
+        if ($this->callBefore(__FUNCTION__, $data) !== false) {
             $ret = parent::insert($data, $is_mulit);
             $this->callAfter(__FUNCTION__, $ret, $data);
         }
@@ -59,7 +59,7 @@ class EventBuild extends CacheBuild
         return $ret;
     }
 
-    private function callBefre($name, & $arg = null)
+    private function callBefore($name, & $arg = null)
     {
         $m = 'onBefore' . ucfirst($name);
         if(method_exists($this->model,$m)){

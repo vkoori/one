@@ -2,11 +2,12 @@
 
 namespace One\Database\Mysql;
 
+use One\Database\DB;
 use One\ConfigTrait;
 use One\Facades\Log;
 use One\Swoole\Pools;
 
-class Connect
+class Connect extends DB
 {
 
     use ConfigTrait, Pools;
@@ -52,6 +53,8 @@ class Connect
      */
     private function execute($sql, $data = [], $retry = 0, $return_pdo = false)
     {
+        self::setQueryLog(sql: $sql, data: $data);
+
         $mykey = $this->key;
         $pdo   = $this->pop();
         $time  = microtime(true);

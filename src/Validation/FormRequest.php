@@ -30,6 +30,11 @@ class FormRequest
 		return request()->all();
 	}
 
+	public function customRules(): array
+	{
+		return [];
+	}
+
 	public function rules(): array
 	{
 		return [];
@@ -71,6 +76,11 @@ class FormRequest
 
 	private function makeValidate(): self
 	{
+		$customRules = $this->customRules();
+		foreach ($customRules as $key => $value) {
+			$this->validator->addValidator($key, new $value);
+		}
+
 		$this->validation = $this->validator->make(
 			inputs: $this->validationData(),
 			rules: $this->rules(),
