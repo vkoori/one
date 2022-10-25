@@ -377,7 +377,7 @@ class Build
 
     /**
      * @param $data
-     * @return int
+     * @return array
      */
     public function update($data)
     {

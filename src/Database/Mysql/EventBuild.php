@@ -16,7 +16,7 @@ class EventBuild extends CacheBuild
 
     /**
      * @param $data
-     * @return int
+     * @return array
      */
     public function update($data)
     {

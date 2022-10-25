@@ -11,7 +11,7 @@ use OneCk\Client;
 
 /**
  * Class Model
- * @method static string insert($data)
+ * @method static array insert($data)
  * @method static EventBuild cache($time)
  * @method static EventBuild with($relation, array $closure = null)
  * @method static ListModel|static[]|Model[] query($sql, array $build = [])

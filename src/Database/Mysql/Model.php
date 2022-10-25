@@ -5,7 +5,7 @@ namespace One\Database\Mysql;
 
 /**
  * Class Model
- * @method static string insert($data, $is_mulit = false)
+ * @method static array insert($data, $is_mulit = false)
  * @method static int delete()
  * @method static EventBuild cache($time)
  * @method static EventBuild with($relation, array $closure = null)
