@@ -356,3 +356,13 @@ function response(?\One\Http\Request\Request $request=Null): \One\Http\Response\
 {
     return \One\Http\Response\Helper::generate(request: $request);
 }
+
+function trimArr(array $arr): array
+{
+    $data = [];
+    foreach ($arr as $key => $value) {
+        $data[$key] = is_string($value) ? trim($value) : $value;
+    }
+
+    return $data;
+}

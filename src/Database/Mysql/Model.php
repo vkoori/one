@@ -21,6 +21,7 @@ namespace One\Database\Mysql;
  * @method static int sum($column)
  * @method static mixed exec($sql, array $build = [], $is_insert = false)
  * @method static \PDO getConnect()
+ * @method static EventBuild instance()
  * @method static EventBuild setConnection($key)
  * @method static EventBuild from($from)
  * @method static EventBuild column(array $columns)
@@ -65,7 +66,7 @@ class Model extends ArrayModel
 
     const TABLE = '';
 
-    protected $_pri_key = '';
+    protected $_pri_key = 'id';
 
     private $_build = null;
 

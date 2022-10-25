@@ -37,10 +37,10 @@ class Request
     {
         $this->server  = &$_SERVER;
         $this->cookie  = &$_COOKIE;
-        $this->get     = &$_GET;
-        $this->post    = &$_POST;
+        $this->get     = trimArr(arr: $_GET);
+        $this->post    = trimArr(arr: $_POST);
         $this->files   = &$_FILES;
-        $this->request = &$_REQUEST;
+        $this->request = trimArr(arr: $_REQUEST);
         $this->headers = $this->getAllHeaders();
     }
 
@@ -117,6 +117,13 @@ class Request
         $reqUri = str_replace($subDirectory, '', $this->getFullUri());
 
         return $reqUri;
+    }
+
+    public function baseUrl(): string
+    {
+        $appPath = str_replace('\\', '/', _APP_PATH_);
+        $subDirectory = str_replace($this->server('DOCUMENT_ROOT'), '', $appPath.'/public');
+        return $this->server('HTTPS') ? "https" : "http" . "://" . $this->server('HTTP_HOST') . $subDirectory;
     }
 
     /**

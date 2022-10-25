@@ -9,7 +9,7 @@ class Build
 
     protected $from = '';
 
-    protected $pri_key = '';
+    protected $pri_key = 'id';
 
     private $columns = [];
 
@@ -33,6 +33,11 @@ class Build
         $this->model      = $model;
         $this->model_name = $model_name;
         $this->connect    = new Connect($connection, $this->model_name);
+    }
+
+    public function instance()
+    {
+        return $this;
     }
 
     private $withs = [];
@@ -247,7 +252,7 @@ class Build
     {
         $res = $this->find($id);
         if ($res === null) {
-            throw new \InvalidArgumentException(sprintf($msg, $id), 4004);
+            throw new \InvalidArgumentException(sprintf($msg, $id), 404);
         } else {
             return $res;
         }
@@ -360,8 +365,14 @@ class Build
      */
     public function insert($data, $is_mulit = false)
     {
-        $r = $this->connect->exec($this->getInsertSql($data, $is_mulit), $this->build, true);
-        return $r;
+        $result = $this->connect->exec($this->getInsertSql($data, $is_mulit), $this->build, true);
+        
+        if ( !$is_mulit ) {
+            $data[$this->pri_key] = $result;
+        } else {
+            $data['affectedRows'] = $result;
+        }
+        return $data;
     }
 
     /**
@@ -370,8 +381,10 @@ class Build
      */
     public function update($data)
     {
-        $r = $this->connect->exec($this->getUpdateSql($data), $this->build);
-        return $r;
+        $result = $this->connect->exec($this->getUpdateSql($data), $this->build);
+
+        $data['affectedRows'] = $result;
+        return $data;
 
     }
 

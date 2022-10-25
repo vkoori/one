@@ -38,6 +38,11 @@ class Build
         $this->connect    = new Connect($connection, $this->model_name);
     }
 
+    public function instance()
+    {
+        return $this;
+    }
+
     private $withs = [];
 
     /**
@@ -242,7 +247,7 @@ class Build
     {
         $res = $this->find();
         if ($res === null) {
-            throw new \InvalidArgumentException(sprintf($msg), 4004);
+            throw new \InvalidArgumentException(sprintf($msg), 404);
         } else {
             return $res;
         }

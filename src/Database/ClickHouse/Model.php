@@ -25,6 +25,7 @@ use OneCk\Client;
  * @method static int sum($column)
  * @method static mixed exec($sql, array $build = [], $is_insert = false)
  * @method static Client getConnect()
+ * @method static EventBuild instance()
  * @method static EventBuild setConnection($key)
  * @method static EventBuild from($from)
  * @method static EventBuild column(array $columns)

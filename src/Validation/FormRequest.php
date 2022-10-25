@@ -61,7 +61,16 @@ class FormRequest
 
 	public function validated(): array
 	{
-		return $this->validation->getValidatedData();
+		$allReq = $this->validationData();
+		$validated = $this->validation->getValidData();
+
+		return array_filter(
+			array: $validated, 
+			callback: function($key) use ($allReq): bool {
+				return isset($allReq[$key]);
+			}, 
+			mode: ARRAY_FILTER_USE_KEY
+		);
 	}
 
 	private function setValidator(): self
