@@ -105,7 +105,8 @@ class File extends Cache
     public function update($key, $val)
     {
         $res = false;
-        $file = $this->getFileName($key);
+        $keyWithPrefix = $this->getTagKey($key);
+        $file = $this->getFileName($keyWithPrefix);
         if (file_exists($file)) {
             $str = file_get_contents($file);
             if ($str) {

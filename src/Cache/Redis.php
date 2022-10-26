@@ -186,8 +186,9 @@ class Redis extends Cache
 
     public function update($key, $val)
     {
+        $keyWithPrefix = $this->getTagKey($key);
         $redis = $this->pop();
-        $ttl = $redis->ttl($key);
+        $ttl = $redis->ttl($keyWithPrefix);
 
         return $this->set($key, $val, $ttl);
     }
