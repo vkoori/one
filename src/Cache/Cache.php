@@ -20,5 +20,6 @@ abstract class Cache
 
     abstract public function del($key);
 
+    abstract public function update($key, $val);
 
 }

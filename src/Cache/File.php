@@ -102,6 +102,23 @@ class File extends Cache
         file_put_contents($file, (time() + $ttl) . $val);
     }
 
+    public function update($key, $val)
+    {
+        $res = false;
+        $file = $this->getFileName($key);
+        if (file_exists($file)) {
+            $str = file_get_contents($file);
+            if ($str) {
+                $time = substr($str, 0, 10);
+                $ttl = $time - time();
+
+                $res = $this->set($key, $val, $ttl);
+            }
+        }
+
+        return $res;
+    }
+
     public function del($key)
     {
         if (is_array($key)) {

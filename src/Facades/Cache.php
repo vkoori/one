@@ -16,6 +16,7 @@ use One\Cache\Redis;
  * @method static bool del($key)
  * @method static bool flush($tag)
  * @method static bool set($key, $val, $ttl = 0, $tags = [])
+ * @method static bool update($key, $val)
  * @method static Redis setConnection($key)
  */
 class Cache extends Facade

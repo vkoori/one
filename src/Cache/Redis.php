@@ -182,7 +182,14 @@ class Redis extends Cache
         } catch (\RedisException $e) {
             return $this->retry('set', func_get_args(), $e->getMessage(), $e->getCode(), $mykey);
         }
+    }
 
+    public function update($key, $val)
+    {
+        $redis = $this->pop();
+        $ttl = $redis->ttl($key);
+
+        return $this->set($key, $val, $ttl);
     }
 
 }
