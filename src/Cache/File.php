@@ -112,6 +112,7 @@ class File extends Cache
             if ($str) {
                 $time = substr($str, 0, 10);
                 $ttl = $time - time();
+                $ttl = $ttl < 1 ? Null : $ttl;
 
                 $res = $this->set($key, $val, $ttl);
             }

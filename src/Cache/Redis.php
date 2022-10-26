@@ -189,6 +189,7 @@ class Redis extends Cache
         $keyWithPrefix = $this->getTagKey($key);
         $redis = $this->pop();
         $ttl = $redis->ttl($keyWithPrefix);
+        $ttl = $ttl < 1 ? Null : $ttl;
 
         return $this->set($key, $val, $ttl);
     }
