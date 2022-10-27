@@ -255,8 +255,12 @@ class Request
         }
     }
 
-    public function getHeader(string $key, ?string $default=Null)
+    public function getHeader(?string $key=Null, ?string $default=Null)
     {
+        if (is_null($key)) {
+            return $this->headers;
+        }
+
         return $this->headers[$this->initHeaderKey(key: $key)] ?? $default;
     }
 
