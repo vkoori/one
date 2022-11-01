@@ -574,14 +574,16 @@ class Build
     }
 
     private $order_by = [];
+    private $order_type = 'asc';
 
     /**
-     * @param $order_by
+     * @param string $type asc/desc
+     * @param string $column
      * @return $this
      */
-    public function orderBy($order_by)
+    public function orderBy(string $column, string $type='asc')
     {
-        $this->order_by[] = $order_by;
+        $this->order_by[] = $column . ' ' . $type;
         return $this;
     }
 
