@@ -53,6 +53,12 @@ class Build
         return $this;
     }
 
+    public function call(string $method, ...$arguments)
+    {
+        call_user_func([$this->model, $method], $arguments);
+        return $this;
+    }
+
     private function fillSelectWith($res, $call)
     {
         foreach ($this->withs as $v) {
