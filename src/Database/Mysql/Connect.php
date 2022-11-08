@@ -64,7 +64,7 @@ class Connect extends DB
                 if (property_exists($pdo, $ptid) === false) {
                     $res = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
                     if (!$res) {
-                        return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey);
+                        return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[0]);
                     }
                     $res->setFetchMode(\PDO::FETCH_CLASS, $this->model);
                     $pdo->{$ptid} = $res;
@@ -74,7 +74,7 @@ class Connect extends DB
             } else {
                 $res = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
                 if (!$res) {
-                    return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey);
+                    return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[0]);
                 }
                 $res->setFetchMode(\PDO::FETCH_CLASS, $this->model);
             }
@@ -87,7 +87,7 @@ class Connect extends DB
             return [$res, $pdo];
         } catch (\PDOException $e) {
             $this->debugLog($sql, $time, $data, $e->getMessage());
-            return $this->retry($sql, $time, $data, $e->getMessage(), $retry, $return_pdo, $mykey);
+            return $this->retry($sql, $time, $data, $e->getMessage(), $retry, $return_pdo, $mykey, $e->getCode());
         } catch (DbException $e) {
             throw $e;
         } catch (\Throwable $e) {
@@ -96,7 +96,7 @@ class Connect extends DB
         }
     }
 
-    private function retry($sql, $time, $data, $err, $retry, $return_pdo, $mykey)
+    private function retry($sql, $time, $data, $err, $retry, $return_pdo, $mykey, $exceptionCode)
     {
         $this->setConnCount($mykey, -1);
         $this->debugLog($sql, $time, $data, $err);
@@ -111,7 +111,7 @@ class Connect extends DB
                 unset(self::$sw[$co_id]);
             }
         }
-        throw new DbException(json_encode(['info' => $err, 'sql' => $sql]), 7);
+        throw new DbException(json_encode(['info' => $err, 'sql' => $sql]), 7, null, $exceptionCode);
     }
 
     private function debugLog($sql, $time = 0, $build = [], $err = [])

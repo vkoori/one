@@ -6,9 +6,9 @@ use One\Facades\Log;
 
 class DbException extends \Exception
 {
-    public function __construct($message = "", $code = 1, $previous = null)
+    public function __construct(string $message="", int $code = 1, ?\Throwable $previous=null, int $exceptionCode=0)
     {
         Log::error($message, 3 + $code);
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $exceptionCode, $previous);
     }
 }
