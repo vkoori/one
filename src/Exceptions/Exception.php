@@ -34,7 +34,7 @@ class Exception
     private function getStatusCode(\Throwable $e): int
     {
         $code = $e->getCode();
-        if ($code === 0) {
+        if ($code < 100 || $code > 599) {
             $code = 500;
         }
 
