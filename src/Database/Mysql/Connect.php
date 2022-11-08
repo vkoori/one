@@ -64,7 +64,7 @@ class Connect extends DB
                 if (property_exists($pdo, $ptid) === false) {
                     $res = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
                     if (!$res) {
-                        return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[0]);
+                        return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[1]);
                     }
                     $res->setFetchMode(\PDO::FETCH_CLASS, $this->model);
                     $pdo->{$ptid} = $res;
@@ -74,7 +74,7 @@ class Connect extends DB
             } else {
                 $res = $pdo->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL]);
                 if (!$res) {
-                    return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[0]);
+                    return $this->retry($sql, $time, $data, $pdo->errorInfo()[2], $retry, $return_pdo, $mykey, $pdo->errorInfo()[1]);
                 }
                 $res->setFetchMode(\PDO::FETCH_CLASS, $this->model);
             }
@@ -87,7 +87,7 @@ class Connect extends DB
             return [$res, $pdo];
         } catch (\PDOException $e) {
             $this->debugLog($sql, $time, $data, $e->getMessage());
-            return $this->retry($sql, $time, $data, $e->getMessage(), $retry, $return_pdo, $mykey, $e->getCode());
+            return $this->retry($sql, $time, $data, $e->getMessage(), $retry, $return_pdo, $mykey, $e->errorInfo[1]);
         } catch (DbException $e) {
             throw $e;
         } catch (\Throwable $e) {
