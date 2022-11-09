@@ -674,8 +674,12 @@ class Build
             if ($v[0] === null) {
                 $sql .= $v[1];
             } else {
-                $data[] = $v[2];
-                $sql    .= $v[0] . $v[1] . '?';
+                if ( is_array($v[2]) ) {
+                    $sql .= $v[0] . $v[1] . $v[2][0];
+                } else {
+                    $data[] = $v[2];
+                    $sql    .= $v[0] . $v[1] . '?';
+                }
             }
             if (isset($v[3])) {
                 $prev = $v[0];
